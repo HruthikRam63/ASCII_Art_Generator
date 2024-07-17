@@ -36,14 +36,12 @@ If someone wants to convert a photograph into ASCII art for artistic or display 
 2. **Install dependencies:**
 
     ### Frontend
-
-        - No specific installation steps if using basic HTML, CSS, and JavaScript.
+      No specific installation steps if using basic HTML, CSS, and JavaScript.
 
     ### Backend
-
-        ```bash
-        cd backend
-        pip install -r requirements.txt
+     ```bash
+     cd backend
+     pip install -r requirements.txt
 
 ## How to Run
 
