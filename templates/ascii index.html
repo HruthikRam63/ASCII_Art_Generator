@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to ASCII Art</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&display=swap');
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            color: #007BFF;
+            transition: border-color 0.3s ease;
+        }
+        input[type="file"]:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .warning {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        .output-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .output-container.active {
+            display: flex;
+        }
+        .output {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .output img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .ascii-art {
+            font-family: Courier, monospace;
+            font-size: 10px;
+            white-space: pre;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            resize: none;
+            overflow: hidden;
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .copy-button {
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .copy-button:hover {
+            background-color: #218838;
+        }
+        @media (max-width: 600px) {
+            button, input[type="file"] {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+        .styled-heading {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            font-style: italic;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="styled-heading">Image to ASCII Art</h1>
+    <div class="container">
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit">Generate ASCII Art</button>
+        </form>
+        <div class="warning">
+            <p>Please upload images with aspect ratios of 3:2 or 4:3 for best results.</p>
+        </div>
+        <div class="output-container" id="outputContainer">
+            {% if ascii_art %}
+            <div class="output">
+                <img src="{{ url_for('static', filename='uploads/' + file.filename) }}" alt="Uploaded Image">
+                <textarea id="asciiArt" class="ascii-art" readonly>{{ ascii_art }}</textarea>
+                <button class="copy-button" onclick="copyToClipboard()">Copy ASCII Art</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function resizeTextarea() {
+            const textarea = document.getElementById('asciiArt');
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        window.onload = resizeTextarea;
+
+        function copyToClipboard() {
+            const textarea = document.getElementById('asciiArt');
+            textarea.select();
+            document.execCommand('copy');
+            alert('ASCII Art copied to clipboard!');
+        }
+
+        const outputContainer = document.getElementById('outputContainer');
+        if (outputContainer && outputContainer.querySelector('.output')) {
+            outputContainer.classList.add('active');
+        }
+    </script>
+</body>
+</html>
